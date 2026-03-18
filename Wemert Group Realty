@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wemert Group Realty</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+    }
+    header {
+      background: #0a2a66;
+      color: white;
+      padding: 16px;
+      text-align: center;
+    }
+    .container {
+      padding: 16px;
+    }
+    .search-box {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .search-box input, .search-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 16px;
+    }
+    .search-box button {
+      background: #0a2a66;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    .listings {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .card img {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .card button {
+      width: 100%;
+      padding: 10px;
+      background: #0a2a66;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+    footer {
+      background: #0a2a66;
+      color: white;
+      text-align: center;
+      padding: 16px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body><header>
+  <h1>Wemert Group Realty</h1>
+  <p>Affordable Homes in Orlando, FL</p>
+</header><div class="container">  <div class="search-box">
+    <h2>Search Homes</h2>
+    <input type="text" id="location" placeholder="Location (Orlando, FL)" />
+    <input type="number" id="price" placeholder="Maximum Price" />
+    <input type="number" id="bedrooms" placeholder="Bedrooms" />
+    <button onclick="searchHomes()">Search</button>
+  </div>  <div class="listings" id="listings"></div></div><footer>
+  <p>Company: Wemert Group Realty</p>
+  <p>Email: jwemertgrouprealty1@gmail.com</p>
+  <p>Phone: 407-435-5072</p>
+</footer><script>
+  const homes = [
+    { price: 220000, bedrooms: 3, img: 'https://via.placeholder.com/400x250', desc: '3 Bedroom Family Home - Orlando, FL' },
+    { price: 180000, bedrooms: 2, img: 'https://via.placeholder.com/400x250', desc: 'Affordable 2 Bedroom Apartment' },
+    { price: 260000, bedrooms: 4, img: 'https://via.placeholder.com/400x250', desc: '4 Bedroom Duplex - Great Value' }
+  ];
+
+  function displayHomes(list) {
+    const listings = document.getElementById('listings');
+    listings.innerHTML = '';
+    list.forEach(home => {
+      listings.innerHTML += `
+        <div class="card">
+          <img src="${home.img}" alt="House" />
+          <p>${home.desc}</p>
+          <strong>$${home.price.toLocaleString()}</strong>
+          <button onclick="alert('We will contact you via email!')">Buy / Inquire</button>
+        </div>`;
+    });
+  }
+
+  function searchHomes() {
+    const maxPrice = document.getElementById('price').value;
+    const beds = document.getElementById('bedrooms').value;
+
+    let filtered = homes.filter(h =>
+      (!maxPrice || h.price <= maxPrice) && (!beds || h.bedrooms >= beds)
+    );
+
+    displayHomes(filtered);
+  }
+
+  displayHomes(homes);
+</script></body>
+</html>
