@@ -1,1 +1,89 @@
-
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wemert Group Realty</title>
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f9}
+header{background:#0a2a66;color:#fff;padding:20px;text-align:center}
+.filters{background:#fff;padding:15px}
+.filters select,.filters button{width:100%;padding:12px;margin-top:10px;font-size:16px}
+.listings{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px;padding:15px}
+.card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+.card img{width:100%;height:200px;object-fit:cover;display:block}
+.card-content{padding:12px}
+.card-content h3{margin:6px 0}
+.icons{color:#555;font-size:14px;margin-bottom:8px}
+.card button{width:100%;padding:10px;margin-top:6px;border:none;border-radius:6px;background:#0a2a66;color:#fff;font-size:16px;cursor:pointer}
+footer{background:#0a2a66;color:#fff;text-align:center;padding:15px}
+</style>
+</head>
+<body>
+<header>
+<h1>Wemert Group Realty</h1>
+<p>Affordable Homes Across Orlando, Florida</p>
+</header>
+<div class="filters">
+<select id="priceFilter">
+<option value="">Max Price</option>
+<option value="200000">$200,000</option>
+<option value="250000">$250,000</option>
+<option value="300000">$300,000</option>
+<option value="350000">$350,000</option>
+<option value="400000">$400,000</option>
+</select>
+<select id="bedFilter">
+<option value="">Min Bedrooms</option>
+<option value="2">2+</option>
+<option value="3">3+</option>
+<option value="4">4+</option>
+<option value="5">5+</option>
+</select>
+<button onclick="filterHomes()">Search Homes</button>
+</div>
+<div class="listings" id="listings"></div>
+<footer>
+<p><strong>Wemert Group Realty</strong></p>
+<p>📧 jwemertgrouprealty1@gmail.com</p>
+<p>📞 407-435-5072</p>
+</footer>
+<script>
+const homes=[
+{img:'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&auto=format',price:185000,bed:2,loc:'Lake Nona'},
+{img:'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&auto=format',price:195000,bed:3,loc:'Winter Park'},
+{img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format',price:205000,bed:3,loc:'Kissimmee'},
+{img:'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&auto=format',price:215000,bed:2,loc:'Altamonte Springs'},
+{img:'https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=800&auto=format',price:225000,bed:3,loc:'Oviedo'},
+{img:'https://images.unsplash.com/photo-1598228723793-52759bba239c?w=800&auto=format',price:235000,bed:4,loc:'Apopka'},
+{img:'https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=800&auto=format',price:245000,bed:3,loc:'Casselberry'},
+{img:'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&auto=format',price:255000,bed:4,loc:'Sanford'},
+{img:'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=800&auto=format',price:265000,bed:3,loc:'Ocoee'},
+{img:'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&auto=format',price:275000,bed:4,loc:'Clermont'},
+{img:'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&auto=format',price:285000,bed:3,loc:'Maitland'},
+{img:'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&auto=format',price:295000,bed:4,loc:'Dr Phillips'},
+{img:'https://images.unsplash.com/photo-1597047084897-51e81819a499?w=800&auto=format',price:305000,bed:4,loc:'Union Park'},
+{img:'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&auto=format',price:315000,bed:5,loc:'Pine Hills'},
+{img:'https://images.unsplash.com/photo-1605276373954-0c4a0dac5b12?w=800&auto=format',price:325000,bed:4,loc:'Belle Isle'},
+{img:'https://images.unsplash.com/photo-1560185127-6a8c97b5cc21?w=800&auto=format',price:335000,bed:5,loc:'Edgewood'},
+{img:'https://images.unsplash.com/photo-1588854337118-1c3a29b6bb65?w=800&auto=format',price:345000,bed:4,loc:'Winter Garden'},
+{img:'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=800&auto=format',price:355000,bed:5,loc:'Windermere'},
+{img:'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&auto=format',price:365000,bed:4,loc:'Horizon West'},
+{img:'https://images.unsplash.com/photo-1554435493-93422e8220c8?w=800&auto=format',price:375000,bed:5,loc:'Lake Mary'},
+{img:'https://images.unsplash.com/photo-1600585152915-d208bec867a1?w=800&auto=format',price:385000,bed:4,loc:'College Park'},
+{img:'https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800&auto=format',price:395000,bed:5,loc:'Baldwin Park'},
+{img:'https://images.unsplash.com/photo-1600585154084-4e5fe7c39198?w=800&auto=format',price:405000,bed:4,loc:'MetroWest'},
+{img:'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&auto=format',price:415000,bed:5,loc:'Doctor Phillips'},
+{img:'https://images.unsplash.com/photo-1600566752734-2f4aaf0c7c74?w=800&auto=format',price:425000,bed:4,loc:'Celebration'},
+{img:'https://images.unsplash.com/photo-1600585153490-76fb20a32601?w=800&auto=format',price:435000,bed:5,loc:'Hunters Creek'},
+{img:'https://images.unsplash.com/photo-1600566753190-7f67b2c8c88f?w=800&auto=format',price:445000,bed:4,loc:'Lake Hart'},
+{img:'https://images.unsplash.com/photo-1600585152933-61a0d5f58c41?w=800&auto=format',price:455000,bed:5,loc:'Vista Lakes'},
+{img:'https://images.unsplash.com/photo-1600566752890-12a30c71b65c?w=800&auto=format',price:465000,bed:4,loc:'Conway'},
+{img:'https://images.unsplash.com/photo-1600585153920-457b278d4b66?w=800&auto=format',price:475000,bed:5,loc:'Azalea Park'}
+];
+function render(list){const box=document.getElementById('listings');box.innerHTML='';list.forEach(h=>{box.innerHTML+=`<div class="card"><img src="${h.img}" alt="House in ${h.loc}"><div class="card-content"><h3>$${h.price.toLocaleString()}</h3><p>${h.loc}, Orlando FL</p><p class="icons">🛏 ${h.bed} Bedrooms</p><button onclick="email('${h.loc}')">View Details / Schedule Visit</button></div></div>`})}
+function filterHomes(){const p=document.getElementById('priceFilter').value;const b=document.getElementById('bedFilter').value;render(homes.filter(h=>(!p||h.price<=p)&&(!b||h.bed>=b)))}
+function email(loc){window.location.href=`mailto:jwemertgrouprealty1@gmail.com?subject=House Inquiry - ${loc}`}
+render(homes)
+</script>
+</body>
+</html>
